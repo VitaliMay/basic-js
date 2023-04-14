@@ -13,9 +13,30 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function transform(arr) {
+  // все сообщения об ошибках проходят тесты)
+  //if (!Array.isArray(arr) || arr === null || arr === undefined) throw new Error("'arr' parameter must be an instance of the Array!");
+  //if (!Array.isArray(arr) || arr === null) throw new Error("'arr' parameter must be an instance of the Array!");
+  //if (!Array.isArray(arr)) throw new Error("'arr' parameter must be an instance of the Array!");
+  if (!Array.isArray(arr)) throw Error("'arr' parameter must be an instance of the Array!");
+
+  let arrResult = arr.slice(0) // формирую массив для работы
+  let foo = ['--discard-next', '--discard-prev', '--double-next', '--double-prev'] // создаю массив последовательностей
+  let result = []
+
+  for (let i=0; i < arr.length; i++) {
+  
+    if (!foo.includes(arrResult[i])) result.push(arrResult[i]);
+    if (foo.includes(arrResult[i])) {
+      if (arrResult[i] === foo[0]) i = i+1;
+      if (arrResult[i] === foo[1] && arrResult[i-2] !== foo[0]) result.pop();
+      if (arrResult[i] === foo[2] && arrResult[i+1] !== undefined) result.push(arrResult[i+1]);
+      if (arrResult[i] === foo[3] && arrResult[i-2] !== foo[0] && arrResult[i-1] !== undefined) result.push(arrResult[i-1]);
+    }
+  }
+
+
+  return result
 }
 
 module.exports = {
